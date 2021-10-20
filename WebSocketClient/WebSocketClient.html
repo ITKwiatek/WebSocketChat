@@ -79,15 +79,36 @@
                 '</tr>'        
         };
 
-        socket.onerror = updateState();
+        socket.onerror = updateState;
         socket.onmessage = function (event) {
+            commsLog.innerHTML += '<tr>' +
+                '<td class="commslog-server">Server</td>' +
+                '<td class="commslog-client">Client</td>' +
+                '<td class="commslog-data">' + htmlEscape(event.data) + '</td></tr>';
+            isConnID(event.data);
+        };
+    };
+
+        closeButton.onclick = function () {
+            if(!socket || socket.readyState !== WebSocket.OPEN){
+                alert("Socket not connected");
+            }
+            socket.close(1000, "Closing from Client");
+        }
+
+        sendButton.onclick = function() {
+            if(!socket || socket.readyState !== WebSocket.OPEN){
+                alert("Socket not connected!");
+            }
+            var data = sendMessage.value;
+            socket.send(data);            
             commsLog.innerHTML += 
                 '<tr>' + 
                     '<td>Server</td>' + 
                     '<td>Client</td>' + 
-                    '<td>' + htmlEscape(event.data) + '</td>' + 
-                '</tr>'          
-            };
+                    '<td>' + htmlEscape(data) + '</td>' + 
+                '</tr>'   
+        }
 
         function htmlEscape(str) {
             return str.toString()
@@ -100,35 +121,40 @@
 
         function updateState() {
             function disable() {
-                sendMessage.disable = true;
-                sendButton.disable = true;
-                closeButton.disable = true;
-                recipents.disable = true;
+                sendMessage.disabled = true;
+                sendButton.disabled = true;
+                closeButton.disabled = true;
+                recipents.disabled = true;
             }
             function enable() {
-                sendMessage.disable = false;
-                sendButton.disable = false;
-                closeButton.disable = false;
-                recipents.disable = false; 
+                console.log("Enable buttons");
+                sendMessage.disabled = false;
+                sendButton.disabled = false;
+                closeButton.disabled = false;
+                recipents.disabled = false; 
             }
-            connectionURL.disable = true;
-            connectButton.disable = true;
+            connectionURL.disabled = true;
+            connectButton.disabled = true;
             if(!socket){
                 console.log("!socket");
                 disable();
             } else {
-                switch(socket.readystate){
+                switch(socket.readyState){
                     case WebSocket.CLOSED:
                         console.log("WebSocket.CLOSED");
                         stateLabel.innerHTML = "Closed";
                         connIdLabel.innerHTML = "ConnId: N/a";
                         disable();
-                        connectionURL.disable = false;
-                        connectButton.disable = false;
+                        connectionURL.disabled = false;
+                        connectButton.disabled = false;
                         break;
                     case WebSocket.CLOSING:
                         console.log("WebSocket.CLOSING");
                         stateLabel.innerHTML = "Closing";
+                        disable();
+                        break;
+                    case WebSocket.CONNECTING:
+                        stateLabel.innerHTML = "Connecting...";
                         disable();
                         break;
                     case WebSocket.OPEN:
@@ -137,9 +163,11 @@
                         enable();
                         break;
                     default:
+                        console.log("default option");
                         stateLabel.innerHTML = "Unknown WebSocket State " + htmlEscape(socket.readyState);
+                        disable();
+                        break;
                 }
             }
         }
-    }
 </script>
