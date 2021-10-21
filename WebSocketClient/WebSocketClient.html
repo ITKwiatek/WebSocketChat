@@ -85,7 +85,7 @@
                 '<td class="commslog-server">Server</td>' +
                 '<td class="commslog-client">Client</td>' +
                 '<td class="commslog-data">' + htmlEscape(event.data) + '</td></tr>';
-            isConnID(event.data);
+            isConnId(event.data);
         };
     };
 
@@ -108,6 +108,12 @@
                     '<td>Client</td>' + 
                     '<td>' + htmlEscape(data) + '</td>' + 
                 '</tr>'   
+        }
+
+        function isConnId(str) {
+            if(str.substring(0,7) == 'ConnId:') {
+                connIdLabel.innerHTML = "ConnId: " + str.substring(8, 45);
+            }
         }
 
         function htmlEscape(str) {

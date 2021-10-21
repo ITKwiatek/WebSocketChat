@@ -10,9 +10,11 @@ namespace WebSocketServer.Middleware
     public class WebSocketServerMiddleware 
     {
         private readonly RequestDelegate _next;
+        private readonly WebSocketServerConnectionManager _manager;
 
-        public WebSocketServerMiddleware(RequestDelegate next)
+        public WebSocketServerMiddleware(RequestDelegate next, WebSocketServerConnectionManager manager)
         {
+            _manager = manager;
             _next = next;
         }
 
@@ -22,6 +24,9 @@ namespace WebSocketServer.Middleware
                {
                    WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                    System.Console.WriteLine("--> WebSocket Connected");
+
+                    string ConnId = _manager.AddSocket(webSocket);
+                    await SendConnIdAsync(webSocket, ConnId);
 
                     await ReceiveMessage(webSocket, async(result, buffer) => 
                     {
@@ -43,6 +48,11 @@ namespace WebSocketServer.Middleware
                }
         }
 
+        private async Task SendConnIdAsync(WebSocket socket, string connId)
+        {
+            var buffer = Encoding.UTF8.GetBytes($"ConnId: {connId}");
+            await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
         private async Task ReceiveMessage(WebSocket socket, Action<WebSocketReceiveResult, byte[]> handleMessage)
         {
             var buffer = new byte[1024 * 4];
