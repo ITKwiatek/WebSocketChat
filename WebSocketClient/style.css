@@ -1,0 +1,25 @@
+
+button {
+    color: red;
+}
+
+input {
+    margin: 20px;
+}
+
+.cardsInline {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.cardsInline .card {
+    margin: 20px 0 ;
+}
+#connectionURL {
+    margin-bottom:20px !important;
+}
+
+#stateLabel {
+    padding-top: 20px;
+}

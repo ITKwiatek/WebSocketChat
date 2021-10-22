@@ -34,3 +34,5 @@ WebSocketServer/obj/Debug/net5.0/staticwebassets/WebSocketServer.StaticWebAssets
 WebSocketServer/obj/Debug/net5.0/staticwebassets/WebSocketServer.StaticWebAssets.xml
 .vscode/launch.json
 .vscode/tasks.json
+WebSocketServer/bin/Debug/net5.0/Newtonsoft.Json.dll
+WebSocketServer/obj/Debug/net5.0/WebSocketServer.csproj.CopyComplete
