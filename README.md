@@ -27,7 +27,11 @@ Communication between two (or more) Clients using WebSocket
 
 ## Screenshots
 ![example](./doc/example.png)
-![output](./MementoPattern/doc/output.png)
+![Build Phases](./doc/1.png)
+![Server Code in UML](./doc/2.png)
+![Request Pipeline](./doc/3.png)
+![Server Code in UML](./doc/4.png)
+![Server Code in UML](./doc/5.png)
 
 
 ## Project Status
