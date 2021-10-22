@@ -10,6 +10,7 @@ namespace WebSocketServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddWebSocketManager();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
